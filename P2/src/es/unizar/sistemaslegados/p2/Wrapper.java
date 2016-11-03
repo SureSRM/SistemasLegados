@@ -1,20 +1,14 @@
 package es.unizar.sistemaslegados.p2;
 
 import com.sun.istack.internal.NotNull;
-import com.sun.org.apache.xalan.internal.xslt.Process;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-/**
- * Created by sergio on 18/10/16.
- */
 public class Wrapper {
 
     private final PrintWriter in;
@@ -29,46 +23,48 @@ public class Wrapper {
 
     /**
      *
+     * @param name Name
+     * @param description Description
+     */
+    public List<Task> addTask(String name, String description){
+
+        if(name.equals("")){
+
+            System.out.println("Added note in general");
+            //TODO: Implement add general task
+
+            return listGeneralTasks();
+        } else{
+
+            System.out.println("Added note in specific");
+            ///TODO: Implement add specific task
+
+            return listSpecificTasks();
+        }
+    }
+
+    /**
+     *
      * @return A list of General Tasks
      */
-    public List<Task> listGeneralTasks(){
-        return listSpecificTasks().stream().filter( p -> p.isGeneral()).collect(Collectors.toList());
+    private List<Task> listGeneralTasks(){
+        List<Task> list = new ArrayList<>();
+
+        //TODO: Implement list general tasks
+
+        return list;
     }
 
     /**
      *
      * @return A list of Specific Tasks
      */
-    public List<Task> listSpecificTasks(){
-        return listSpecificTasks().stream().filter( p -> !p.isGeneral()).collect(Collectors.toList());
-    }
+    private List<Task> listSpecificTasks(){
+        List<Task> list = new ArrayList<>();
 
-    /**
-     *
-     * @return A list of all Tasks
-     */
-    private List<Task> listTasks(){
-        //STUFF
-        return null;
-    }
+        //TODO: Implement list specific tasks
 
-    /**
-     *
-     * @param date Date
-     * @param name Name
-     * @param description Description
-     */
-    public void addTask(@NotNull String date, String name, @NotNull String description){
-
-        if(name==null){
-            //MORE STUFF FOR GENERAL
-
-
-        } else{
-            //MORE STUFF FOR SPECIFIC
-        }
-
-
+        return list;
     }
 
     public void exit(){

@@ -31,12 +31,14 @@ public class Main {
 
     }
     private static void startGUI(){
-        new Wrapper(in, out, err);
+
+        GUIPanel Window = new GUIPanel( new Wrapper(in, out, err) );
+        Window.setVisible(true);
     }
 
     public static void main(String[] args) {
-        connect();
-        access();
+//        connect();
+//        access();
         startGUI();
     }
 }

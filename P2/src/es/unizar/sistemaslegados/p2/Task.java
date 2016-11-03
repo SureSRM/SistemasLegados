@@ -1,8 +1,5 @@
 package es.unizar.sistemaslegados.p2;
 
-/**
- * Created by sergio on 18/10/16.
- */
 public class Task {
 
     private String date;
