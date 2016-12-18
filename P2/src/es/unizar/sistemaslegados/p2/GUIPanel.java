@@ -38,7 +38,8 @@ public class GUIPanel extends JFrame{
                     private JComboBox<String> tipoNota;
                 private JPanel descriptionPanel;
                     private JLabel labelTextoDescripcion;
-                    private JTextField cajaTextoDescripcion;
+                    //private JTextField cajaTextoDescripcion;
+                    private JTextArea cajaTextoDescripcion;
             private JButton botonEnviar;
 
 
@@ -53,6 +54,7 @@ public class GUIPanel extends JFrame{
         int ancho = Toolkit.getDefaultToolkit().getScreenSize().width;
         int alto = Toolkit.getDefaultToolkit().getScreenSize().height;
         this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 500, 500);
+        this.setExtendedState(MAXIMIZED_BOTH);                  // Al crear la ventana la creara maximizada
         this.setResizable(true);                                // hacemos que la ventana sea redimiensionable
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // hacemos que cuando se cierre la ventana termina todo proceso
 
@@ -70,7 +72,8 @@ public class GUIPanel extends JFrame{
         labelTextoDestino = new JLabel();
         cajaTextoDestino = new JTextField(20);          // Cuadro de texto para indicar destino de la nota, se limita a 20 catacteres
         labelTextoDescripcion = new JLabel();
-        cajaTextoDescripcion = new JTextField(150);  // Cuadro de texto para indicar la descripcioin de la nota, se limita a 150 caracteres
+        //cajaTextoDescripcion = new JTextField(150);  // Cuadro de texto para indicar la descripcioin de la nota, se limita a 150 caracteres
+        cajaTextoDescripcion = new JTextArea(10, 50);  // Cuadro de texto para indicar la descripcioin de la nota, se limita a 150 caracteres
         botonEnviar = new JButton();              // boton para enviar la nota
 
         /********************************************************
@@ -193,7 +196,7 @@ public class GUIPanel extends JFrame{
         labelTextoDescripcion.setText("Descripcion:   ");
         // El cuadro de texto de la descripciond de la nota
         cajaTextoDescripcion.setText(""); //Descripcion
-        cajaTextoDescripcion.setMaximumSize(new Dimension(1000,5));//setSize(new Dimension(10, 5));
+       // cajaTextoDescripcion.setMaximumSize(new Dimension(1000,5));//setSize(new Dimension(10, 5));
 
         descriptionPanel.add(labelTextoDescripcion);
         descriptionPanel.add(cajaTextoDescripcion);
@@ -217,7 +220,6 @@ public class GUIPanel extends JFrame{
                 String nombre = cajaTextoDestino.getText();
                 // obtenemos el contenido de la caja de descriptionPanel
                 String descripcion = cajaTextoDescripcion.getText();
-
 
                 if ( descripcion.equals("") ) { //No hay deescripcion
                     JOptionPane.showMessageDialog(principal, "La nota ha de tener descripcion");
@@ -262,7 +264,7 @@ public class GUIPanel extends JFrame{
         // aniade a la ventana principal
         this.add(muestraNotas, BorderLayout.PAGE_START);
         this.add(muestraFormulario);
-        this.pack();
+       // this.pack();
     }
 
     private void cleanFields(){

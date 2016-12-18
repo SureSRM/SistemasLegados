@@ -8,9 +8,9 @@
        PROCEDURE DIVISION.
        MAIN-PARA.
            DISPLAY ( 1 1) ERASE.
-           DISPLAY ( 3 15) "*******************************************".
-           DISPLAY ( 5 15) "     HUMAN RESOURCE MANAGEMENT SYSTEM      ".
-           DISPLAY ( 7 15) "*******************************************".
+           DISPLAY ( 3 15) "******************************************".
+           DISPLAY ( 5 15) "     HUMAN RESOURCE MANAGEMENT SYSTEM     ".
+           DISPLAY ( 7 15) "******************************************".
            DISPLAY ( 10 25) "1. HRMS WRITE".
            DISPLAY ( 12 25) "2. HRMS READ".
            DISPLAY ( 14 25) "3. EXIT".
@@ -27,6 +27,7 @@
                 GO TO MAIN-PARA
              ELSE
                 STOP RUN.
+             END-IF.
 
        IDENTIFICATION DIVISION.
        PROGRAM-ID. EMPREAD.
@@ -319,19 +320,30 @@
                        IF CHOICE = 7
                           GO TO PAYMENT-PARA
                        ELSE
-                          IF CHOICE = 8
-                             GO TO CONFIRMATION-PARA
-                          ELSE
-                            IF CHOICE = 9
-                               GO TO GRADE-PARA
-                            ELSE
-                              IF CHOICE = 10
-                                 GO TO TRANSFER-PARA
-                              ELSE
-                                IF CHOICE = 11
-                                   GO TO EMPPERSONAL-PARA
-                                 ELSE
-                                   EXIT PROGRAM.
+                         IF CHOICE = 8
+                            GO TO CONFIRMATION-PARA
+                         ELSE
+                           IF CHOICE = 9
+                              GO TO GRADE-PARA
+                           ELSE
+                             IF CHOICE = 10
+                                GO TO TRANSFER-PARA
+                             ELSE
+                               IF CHOICE = 11
+                                  GO TO EMPPERSONAL-PARA
+                                ELSE
+                                  EXIT PROGRAM.
+                                END-IF
+                             END-IF
+                           END-IF  
+                         END-IF
+                       END-IF
+                     END-IF
+                   END-IF
+                 END-IF
+               END-IF
+             END-IF
+           END-IF.
 
        EMP-PARA.
            DISPLAY(1 1) ERASE.
@@ -962,19 +974,30 @@
                        IF CHOICE = 7
                           GO TO PAYMENT-PARA
                        ELSE
-                          IF CHOICE = 8
-                             GO TO CONFIRMATION-PARA
-                          ELSE
-                            IF CHOICE = 9
-                               GO TO GRADE-PARA
-                            ELSE
-                              IF CHOICE = 10
-                                 GO TO TRANSFER-PARA
-                              ELSE
-                                IF CHOICE = 11
-                                   GO TO EMPPERSONAL-PARA
-                                 ELSE
-                                   EXIT PROGRAM.
+                         IF CHOICE = 8
+                            GO TO CONFIRMATION-PARA
+                         ELSE
+                           IF CHOICE = 9
+                              GO TO GRADE-PARA
+                           ELSE
+                             IF CHOICE = 10
+                                GO TO TRANSFER-PARA
+                             ELSE
+                               IF CHOICE = 11
+                                  GO TO EMPPERSONAL-PARA
+                               ELSE
+                                  EXIT PROGRAM.
+                               END-IF
+                             END-IF
+                           END-IF  
+                         END-IF
+                       END-IF
+                     END-IF
+                   END-IF
+                 END-IF
+               END-IF
+             END-IF
+           END-IF.
 
        EMP-PARA.
            DISPLAY(1 1) ERASE.
