@@ -1374,11 +1374,13 @@
 
        WORKING-STORAGE SECTION.
 
-       77 FSB       PIC XX.
-       77 PAG       PIC 99.
-       77 LINEA  PIC 99.
-       77 HASNEXT   PIC 9.
-       77 CHOICE    PIC XX(30).
+       77 FSB          PIC XX.
+       77 PAG          PIC 99.
+       77 LINEA        PIC 99.
+       77 HASNEXT      PIC 9.
+       77 CONT         PIC 99.
+       77 TEXT-LENGTH  PIC 99.
+       77 CHOICE       PIC XX(30).
 
        SCREEN SECTION.
        01 CLEAR-SCREEN.
@@ -1389,6 +1391,15 @@
            DISPLAY CLEAR-SCREEN AT LINE 1 COL 1.
            DISPLAY "ENTER A CITY TO LOOKING FOR :" AT LINE 1 COL 2.
            ACCEPT CHOICE AT LINE 1 COL 31.
+
+           SET TEXT-LENGTH TO 0
+           INSPECT FUNCTION REVERSE ( CHOICE )
+           TALLYING TEXT-LENGTH FOR LEADING SPACE
+
+           SUBTRACT TEXT-LENGTH
+           FROM 30
+           GIVING TEXT-LENGTH
+
            SET PAG TO 1.
            SET HASNEXT TO 1.
            OPEN INPUT BRANCHFILE.
@@ -1398,9 +1409,11 @@
 
        PRINT-PAGE.
            DISPLAY CLEAR-SCREEN AT LINE 1 COL 1.
-           DISPLAY " RESULTS PAGE :"
-           AT LINE 1 COL 1.
-           DISPLAY PAG AT LINE 1 COL 16.
+           DISPLAY " RESULTS FOR :" AT LINE 1.
+           DISPLAY CHOICE AT LINE 1 COL 16.
+           DISPLAY TEXT-LENGTH AT LINE 1 COL 40
+           DISPLAY " PAGE :" AT LINE 1 COL 55.
+           DISPLAY PAG AT LINE 1 COL 63.
 
            SET LINEA TO 3.
            PERFORM PRINT-SLOT UNTIL LINEA>16 OR HASNEXT=0.
@@ -1414,24 +1427,30 @@
            END-READ.
 
        PRINT-RECORD.
-       IF BBRADD EQUALS CHOICE
-           DISPLAY " BRANCH CODE    :" AT LINE LINEA COL 1.
-           DISPLAY BBRID AT LINE LINEA COL 19.
-           ADD 1 TO LINEA.
-           DISPLAY " BRANCH NAME    :" AT LINE LINEA COL 1.
-           DISPLAY BBRNAME AT LINE LINEA COL 19.
-           ADD 1 TO LINEA.
-           DISPLAY " BRANCH ADDRESS :" AT LINE LINEA COL 1.
-           DISPLAY BBRADD AT LINE LINEA COL 19.
-           ADD 1 TO LINEA.
-           DISPLAY " PHONE          :" AT LINE LINEA COL 1.
-           DISPLAY BBRPH AT LINE LINEA COL 19.
-           ADD 1 TO LINEA.
-           DISPLAY " E-MAIL         :"  AT LINE LINEA COL 1.
-           DISPLAY BEMAIL  AT LINE LINEA COL 19.
-           ADD 1 TO LINEA.
-           DISPLAY " MANAGER NAME   :" AT LINE LINEA COL 1.
-           DISPLAY BMGRNAME AT LINE LINEA COL 19.
-           ADD 2 TO LINEA.
+
+           SET CONT TO 0
+           INSPECT BBRADD TALLYING CONT
+           FOR ALL CHOICE ( 1 : TEXT-LENGTH )
+
+           IF CONT > 0 OR TEXT-LENGTH = 0 THEN
+               DISPLAY " BRANCH CODE    :" AT LINE LINEA COL 1
+               DISPLAY BBRID AT LINE LINEA COL 19
+               ADD 1 TO LINEA
+               DISPLAY " BRANCH NAME    :" AT LINE LINEA COL 1
+               DISPLAY BBRNAME AT LINE LINEA COL 19
+               ADD 1 TO LINEA
+               DISPLAY " BRANCH ADDRESS :" AT LINE LINEA COL 1
+               DISPLAY BBRADD AT LINE LINEA COL 19
+               ADD 1 TO LINEA
+               DISPLAY " PHONE          :" AT LINE LINEA COL 1
+               DISPLAY BBRPH AT LINE LINEA COL 19
+               ADD 1 TO LINEA
+               DISPLAY " E-MAIL         :"  AT LINE LINEA COL 1
+               DISPLAY BEMAIL  AT LINE LINEA COL 19
+               ADD 1 TO LINEA
+               DISPLAY " MANAGER NAME   :" AT LINE LINEA COL 1
+               DISPLAY BMGRNAME AT LINE LINEA COL 19
+               ADD 2 TO LINEA
+           END-IF.
 
            END PROGRAM LISTBRANCH.
