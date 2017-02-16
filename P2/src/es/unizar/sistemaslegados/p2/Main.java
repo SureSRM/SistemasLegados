@@ -1,44 +1,28 @@
 package es.unizar.sistemaslegados.p2;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
 
     private static Process process = null;
-    private static PrintWriter in;
-    private static Scanner out;
-    private static Scanner err;
+    private static BufferedWriter in;
+    private static BufferedReader out;
 
-    private static void connect(){
 
+    public static void main(String[] args) {
         try {
-            process = Runtime.getRuntime().exec("/usr/local/bin/s3270 155.152.XXXXXXXXXXX");
+            process = Runtime.getRuntime().exec("/usr/local/bin/s3270 155.210.152.51:101");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //Get descriptors
-        in = new PrintWriter( new OutputStreamWriter( process.getOutputStream() ) );
-        out = new Scanner(process.getInputStream());
-        err = new Scanner(process.getErrorStream());
+        in =new BufferedWriter(new OutputStreamWriter( process.getOutputStream()));
+        out = new BufferedReader( new InputStreamReader(process.getInputStream()));
 
-    }
-
-    private static void access(){
-
-    }
-    private static void startGUI(){
-
-        GUIPanel Window = new GUIPanel( new Wrapper(in, out, err) );
+        GUIPanel Window = new GUIPanel( new Wrapper(in, out) );
+//        GUIPanel Window = new GUIPanel( new Wrapper() );
         Window.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-//        connect();
-//        access();
-        startGUI();
     }
 }

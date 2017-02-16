@@ -9,7 +9,7 @@ public class Task {
 
     public Task(String date, String description){
         this.date=date;
-        this.name=null;
+        this.name="";
         this.description=description;
         this.isGeneral=true;
     }
@@ -34,5 +34,11 @@ public class Task {
 
     public boolean isGeneral() {
         return isGeneral;
+    }
+
+    @Override
+    public String toString() {
+
+        return ' ' + date + ' ' + name + ' ' + description + '\n';
     }
 }
