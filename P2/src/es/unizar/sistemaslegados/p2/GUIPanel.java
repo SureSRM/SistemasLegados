@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -123,8 +124,7 @@ public class GUIPanel extends JFrame{
         // Componentes que muestran las notas genearales
         tituloPanelGeneral.setText("Notas Generales");
         tituloPanelGeneral.setVisible(true);
-        notasGeneral.setText("Inserte Nombre \n hola");    // colocamos un texto a la etiqueta
-        notasGeneral.setText("Inserte Nombre \n hola\n\n\n");    // TODO: Bind variable
+        notasGeneral.setText("<empty list>");    // colocamos un texto a la etiqueta
         notasGeneral.setEditable(false);
         notasGeneral.setVisible(true);
         parteNotasGenerales.add(tituloPanelGeneral, BorderLayout.NORTH);
@@ -133,7 +133,7 @@ public class GUIPanel extends JFrame{
         //Componente que muestra las notas especificas
         tituloPanelEspecifico.setText("Notas Especificas");
         tituloPanelEspecifico.setVisible(true);
-        notasEspecifica.setText("Notas especifica \n sino miralas");    // colocamos un texto a la etiqueta
+        notasEspecifica.setText("<empty list>");    // colocamos un texto a la etiqueta
         notasEspecifica.setEditable(false);
         notasEspecifica.setVisible(true);
         // Coloca las notas con el titulo en su cuadro
@@ -224,11 +224,17 @@ public class GUIPanel extends JFrame{
                 if ( descripcion.equals("") ) { //No hay deescripcion
                     JOptionPane.showMessageDialog(principal, "La nota ha de tener descripcion");
                 } else {
-                    if (isGeneral) {
+                    if (isGeneral) { //TODO: Important part
                         if( !nombre.equals("") ){
                             JOptionPane.showMessageDialog(principal, "El tipo de nota GENERAL no admite destinatario");
                         } else {
-                            List<Task> newTasks = wrapper.addTask(nombre, descripcion); //Returns the new list
+                            List<Task> newTasks = wrapper.addTask(nombre, descripcion.replace(' ','_')); //Returns the new list
+
+//                            List<Task> newTasks = new ArrayList<Task>(); //Returns the new list
+//                            newTasks.add(new Task("5555","description"));
+//                            newTasks.add(new Task("6666","description2"));
+
+
                             updateGeneralTasks(newTasks);
                             cleanFields();
                         }
@@ -236,7 +242,12 @@ public class GUIPanel extends JFrame{
                         if( nombre.equals("") ){
                             JOptionPane.showMessageDialog(principal, "Se necesita un destinatario para el tipo de tarea ESPECIFICO");
                         } else {
-                            List<Task> newTasks = wrapper.addTask(nombre, descripcion); //Returns the new list
+                            List<Task> newTasks = wrapper.addTask(nombre, descripcion.replace(' ','_')); //Returns the new list
+
+//                            List<Task> newTasks = new ArrayList<Task>(); //Returns the new list
+//                            newTasks.add(new Task("5555","author1","description"));
+//                            newTasks.add(new Task("6666","author2","description2"));
+
                             updateSpecificTasks(newTasks);
                             cleanFields();
                         }
