@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Wrapper {
@@ -51,17 +52,17 @@ public class Wrapper {
                 write(description);
                 enter();
 
-                String[] screen = getScreen();
-                boolean error = true;
-                for (int i = screen.length-1; i >= 0; i--) {
-                    if (screen[i].contains("GENERAL TASK ASSIGNED")){
-                        error =false;
-                        break;
-                    }
-                }
-                if (error){
-                    System.err.println("> Error: Error creating new task");
-                }
+//                String[] screen = getScreen();
+//                boolean error = true;
+//                for (int i = screen.length-1; i >= 0; i--) {
+//                    if (screen[i].contains("GENERAL TASK ASSIGNED")){
+//                        error =false;
+//                        break;
+//                    }
+//                }
+//                if (error){
+//                    System.err.println("> Error: Error creating new task");
+//                }
 
                 write("3");
                 enter();
@@ -85,17 +86,18 @@ public class Wrapper {
                 write(description);
                 enter();
 
-                String[] screen = getScreen();
-                boolean error = true;
-                for (int i = screen.length-1; i >= 0; i--) {
-                    if (screen[i].contains("SPECIFIC TASK ASSIGNED")){
-                        error =false;
-                        break;
-                    }
-                }
-                if (error){
-                    System.err.println("> Error: Possible error creating new task");
-                }
+//                String[] screen = getScreen();
+//                boolean error = true;
+//                for (int i = screen.length-1; i >= 0; i--) {
+//                    if (screen[i].contains("SPECIFIC TASK ASSIGNED")){
+//                        error =false;
+//                        break;
+//                    }
+//                }
+//                if (error){
+//                    System.err.println("> Error: Possible error creating new task");
+//                    enter();
+//                }
 
                 write("3");
                 enter();
@@ -120,24 +122,44 @@ public class Wrapper {
             write("2");
             enter();
             write("1");
-            enter();
-            String[] screen = getScreen();
 
-            boolean lastPage =false;
+            String[] screen = getScreen();
+            if(screen[39].matches("\\?[ ]*") || screen[38].matches("\\?[ ]*")){ //Before single entering we have to manual check if double enter is needed
+                log("--Manual check: OK Passing page");
+                singleEnter();
+                //Now we are in the correct
+            }
+
+            boolean lastPage=false;
+            boolean taskZoneFound;
+
             while(!lastPage){
-                for (int i = 0; i < screen.length; i++) {
+
+                singleEnter();
+                screen = getScreen();
+                taskZoneFound=false;
+                for (int i = screen.length-1; i >=0; i--) {
+
                     if (screen[i].startsWith("TASK ")) {
+                        taskZoneFound=true;
 
                         String[] fields = screen[i].split(" ");
-                        Task t = new Task(fields[3], fields[5] );
-                        list.add(t);
+
+//                        int taskNum = Integer.parseInt(fields[1].substring(0,fields[1].length()-1));
+
+                        list.add( new Task(fields[3], fields[5]) );
+
+                    } else if(screen[i].startsWith("TOTAL TASK")) { //Prevents reading a previous TOTAL
+                        lastPage = true;
+                        taskZoneFound = true;
+                    }else if(screen[i].startsWith("MENU PRINCIPAL")){
+                        break;
+                    } else if (taskZoneFound){ //It allways will be over Tasks list
+                        break;
                     }
                 }
-                if(screen[39].matches("[ ]*")){
+                if(!taskZoneFound){ //If no tasks found in this page
                     lastPage=true;
-                } else{
-                    enter();
-                    screen = getScreen();
                 }
             }
             write("3");
@@ -145,6 +167,11 @@ public class Wrapper {
         }catch (IOException e){
             System.err.println("> Error: IOEXception");
         }
+
+        if(list.isEmpty()){
+            System.err.println("Empty List");
+        }
+
         return list;
     }
 
@@ -153,30 +180,51 @@ public class Wrapper {
      * @return A list of Specific Tasks
      */
     private List<Task> listSpecificTasks(){
+
         List<Task> list = new ArrayList<>();
 
-        try{
+        try {
             write("2");
             enter();
             write("2");
-            enter();
-            String[] screen = getScreen();
 
-            boolean lastPage =false;
+            String[] screen = getScreen();
+            if(screen[39].matches("\\?[ ]*") || screen[38].matches("\\?[ ]*")){ //Before single entering we have to manual check if double enter is needed
+                log("--Manual check: OK Passing page");
+                singleEnter();
+                //Now we are in the correct
+            }
+
+            boolean lastPage=false;
+            boolean taskZoneFound;
+
             while(!lastPage){
-                for (int i = 0; i < screen.length; i++) {
+
+                singleEnter();
+                screen = getScreen();
+                taskZoneFound=false;
+                for (int i = screen.length-1; i >=0; i--) {
+
                     if (screen[i].startsWith("TASK ")) {
+                        taskZoneFound=true;
 
                         String[] fields = screen[i].split(" ");
-                        Task t = new Task(fields[3], fields[4], fields[5]);
-                        list.add(t);
+
+//                        int taskNum = Integer.parseInt(fields[1].substring(0,fields[1].length()-1));
+
+                        list.add( new Task(fields[3], fields[4], fields[5]) );
+
+                    } else if(screen[i].startsWith("TOTAL TASK")) { //Prevents reading a previous TOTAL
+                        lastPage = true;
+                        taskZoneFound = true;
+                    }else if(screen[i].startsWith("MENU PRINCIPAL")){
+                        break;
+                    } else if (taskZoneFound){ //It allways will be over Tasks list
+                        break;
                     }
                 }
-                if(screen[39].matches("[ ]*")){
+                if(!taskZoneFound){ //If no tasks found in this page
                     lastPage=true;
-                } else{
-                    enter();
-                    screen = getScreen();
                 }
             }
             write("3");
@@ -184,6 +232,11 @@ public class Wrapper {
         }catch (IOException e){
             System.err.println("> Error: IOEXception");
         }
+
+        if(list.isEmpty()){
+            System.err.println("Empty List");
+        }
+
         return list;
     }
 
@@ -249,12 +302,12 @@ public class Wrapper {
         //We take the last 2 line (state and confirm)
         String state = this.out.readLine();
         if(state.equals("data: Keyboard locked")){
-            log("KEYBOARD LOCKED");
+//            log("KEYBOARD LOCKED");
             state = this.out.readLine();
         }
 
         String confirm = this.out.readLine(); //Consume state line
-        log("State: " + state + "\nConfirm: " + confirm + '\n');
+//        log("State: " + state + "\nConfirm: " + confirm + '\n');
 
         if(!confirm.equals("ok")){
             System.err.println("> Error: Bad Request");
@@ -262,44 +315,73 @@ public class Wrapper {
     }
 
     private void write(String s) throws IOException {
+        sleep(100);
+        log("> String: " + s);
         this.send("string(\"" + s + "\")");
-        sleep(200);
+        sleep(100);
+        consumeStateResponse();
+    }
+
+    private void singleEnter() throws IOException {
+        sleep(100);
+        this.send("enter");
+        sleep(100);
         consumeStateResponse();
     }
 
     private void enter() throws IOException {
-        this.send("enter");
-        sleep(200);
-        consumeStateResponse();
-
+        sleep(100);
+        log("> Enter");
         String[] screen = getScreen();
-        if(!screen[41].matches("[ ]*")) { //It's 80 spaces
-            this.send("enter");
-            sleep(200);
-            consumeStateResponse();
+        if(screen[39].matches("[ ]*")) { //If it is not endpage before ENTER, we single enter
+            log("  -Single enter");
+            singleEnter();
+
+            screen = getScreen();
+            if(!screen[39].matches("[ ]*") && !screen[39].matches("\\?[ ]*") ) { //It it is endpage after ENTER, we ENTER again
+                log("  -Endpage after enter. Doing second enter");
+                singleEnter();
+            }
+        } else { //If it is endpage before ENTER, we double enter
+            log("  -Double enter");
+            singleEnter();
+            singleEnter();
         }
+
     }
 
     private String[] getScreen() throws IOException {
         this.send("ascii");
-        String result[] = new String[43];
+        String screen[] = new String[43];
         String line;
 
-        for (int i=0; i < result.length; i++) {
+        for (int i=0; i < screen.length; i++) {
             line = this.out.readLine();
-            result[i] = line.substring(6);
+            screen[i] = line.substring(6);
         }
 
         consumeStateResponse();
-        return result;
+
+        logScreen(screen);
+        return screen;
+    }
+
+    //Dev Utils
+
+    private void logScreen(String[] screen){
+        if (verbose) {
+            for (String s: screen) {
+                log("                 |" + s + "|");
+            }
+            log("\n");
+        }
     }
 
     private void log(String s){
         if (verbose){
-            System.out.println("> Log: " + s);
+            System.out.println(s);
         }
     }
-
 
     private void sleep(int i){
         try {

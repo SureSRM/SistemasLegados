@@ -234,6 +234,7 @@ public class GUIPanel extends JFrame{
 //                            newTasks.add(new Task("5555","description"));
 //                            newTasks.add(new Task("6666","description2"));
 
+
                             updateGeneralTasks(newTasks);
                             cleanFields();
                         }
